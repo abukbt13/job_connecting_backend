@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\RefereeController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,5 +30,8 @@ Route::post('auth/login',[UsersController::class, 'login']);
 
 Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('post_job',[PostController::class, 'post_job']);
-    Route::post('show_post',[PostController::class, 'show_post']);
+    Route::get('show_posts',[PostController::class, 'show_post']);
+
+    Route::post('referee/add',[RefereeController::class, 'create']);
+
 });

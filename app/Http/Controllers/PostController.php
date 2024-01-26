@@ -50,7 +50,13 @@ class PostController extends Controller
      */
     public function show_post()
     {
-        //
+//         $user_id=Auth::user()->id;
+                $posts= Post::all();
+
+                return response([
+                    'message'=>'success retrieved',
+                    'posts'=>$posts
+                ]);
     }
 
 }
