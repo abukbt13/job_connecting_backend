@@ -29,9 +29,13 @@ Route::post('auth/login',[UsersController::class, 'login']);
 
 
 Route::group(['middleware'=>['auth:sanctum']],function(){
+
+    Route::post('auth/update',[UsersController::class, 'update']);
+
     Route::post('post_job',[PostController::class, 'post_job']);
     Route::get('show_posts',[PostController::class, 'show_post']);
 
     Route::post('referee/add',[RefereeController::class, 'create']);
+    Route::get('referee/view',[RefereeController::class, 'view']);
 
 });

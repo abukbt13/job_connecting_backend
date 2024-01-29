@@ -56,18 +56,20 @@ class RefereeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function view(Request $request)
     {
-        //
+        $user = Auth::user();
+        $user_id = $user->id;
+        $referees = Referee::where('user_id', $user_id)->get();
+
+
+        return response([
+            'message' => 'Referees successfully fetched',
+            'referees' => $referees
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Referee $referee)
-    {
-        //
-    }
+
 
     /**
      * Show the form for editing the specified resource.
