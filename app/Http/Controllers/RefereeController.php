@@ -48,6 +48,7 @@ class RefereeController extends Controller
         $referee->user_id = $user_id;
         $referee->save();
         return response([
+            'status'=>'success',
             'message'=>'referee successfully created',
             'referees'=>$referee
         ]);

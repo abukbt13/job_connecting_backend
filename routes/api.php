@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\JobController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RefereeController;
 use App\Http\Controllers\UsersController;
@@ -29,11 +30,14 @@ Route::post('auth/login',[UsersController::class, 'login']);
 
 
 Route::group(['middleware'=>['auth:sanctum']],function(){
+    Route::get('auth/user',[UsersController::class,'auth']);
 
     Route::post('auth/update',[UsersController::class, 'update']);
 
     Route::post('post_job',[PostController::class, 'post_job']);
     Route::get('show_posts',[PostController::class, 'show_post']);
+
+    Route::get('show_job_seekers',[JobController::class, 'show']);
 
     Route::post('referee/add',[RefereeController::class, 'create']);
     Route::get('referee/view',[RefereeController::class, 'view']);

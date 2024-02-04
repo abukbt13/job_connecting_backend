@@ -18,6 +18,7 @@ class UsersController extends Controller
         $rules = [
             'email' => 'required|email|unique:users',
             'password' => 'required',
+            'role' => 'required',
             'firstName' => 'required',
             'lastName' => 'required',
             'phone' => 'required',
@@ -36,6 +37,7 @@ class UsersController extends Controller
         $user->lastName = $data['lastName'];
         $user->phone = $data['phone'];
         $user->email = $data['email'];
+        $user->role = $data['role'];
         $user->password = Hash::make($request->password);
         $user->save();
 //        storelog('Sign in', $user,'Linux');
@@ -101,6 +103,7 @@ class UsersController extends Controller
             'lastName' => 'required',
             'phone' => 'required',
         ];
+
         $data = request()->all();
         $valid = Validator::make($data, $rules);
         if (count($valid->errors())){
@@ -113,6 +116,12 @@ class UsersController extends Controller
         $user->firstName = $data['firstName'];
         $user->lastName = $data['lastName'];
         $user->phone = $data['phone'];
+
+        $picture = $request->file('picture');
+        $pictureName = time() . '_' .  $picture->getClientOriginalName();
+        $picture->storeAs('Profiles', $pictureName, 'public');
+
+        $user->picture = $pictureName;
         $user->update();
         return response([
             'status' => 'success',
