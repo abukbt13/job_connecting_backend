@@ -116,12 +116,19 @@ class UsersController extends Controller
         $user->firstName = $data['firstName'];
         $user->lastName = $data['lastName'];
         $user->phone = $data['phone'];
+        $user->county = $data['county'];
+        $user->sub_county = $data['sub_county'];
+        $user->gender = $data['gender'];
 
-        $picture = $request->file('picture');
-        $pictureName = time() . '_' .  $picture->getClientOriginalName();
-        $picture->storeAs('Profiles', $pictureName, 'public');
+        if($request->hasFile('picture')){
+            $picture = $request->file('picture');
+            $pictureName = time() . '_' .  $picture->getClientOriginalName();
+//        $picture->storeAs('Profiles', $pictureName, 'public');
+            $picture->move(public_path('Profiles/'), $pictureName);
+            $user->picture = $pictureName;
+//            unlink(public_path('Profiles/' . $pictureName));
+        }
 
-        $user->picture = $pictureName;
         $user->update();
         return response([
             'status' => 'success',

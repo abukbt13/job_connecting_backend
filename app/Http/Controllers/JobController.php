@@ -12,8 +12,6 @@ class JobController extends Controller
     public function show()
     {
         $job_seekers = User::where('role', 'job_seeker')->get();
-
-
         return response([
             'status' => 'success',
             'message' => 'Job seekers successfully fetched',
