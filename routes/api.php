@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\ConnectController;
+use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RefereeController;
 use App\Http\Controllers\UsersController;
@@ -29,6 +32,8 @@ Route::post('auth/change_password/{id}',[UsersController::class, 'change_passwor
 Route::post('auth/login',[UsersController::class, 'login']);
 
 
+Route::post('stkpush',[PaymentController::class, 'C2BMpesaApi']);
+
 Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::get('auth/user',[UsersController::class,'auth']);
 
@@ -42,4 +47,12 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('referee/add',[RefereeController::class, 'create']);
     Route::get('referee/view',[RefereeController::class, 'view']);
 
+//    connect
+    Route::post('job_seeker/connect',[ConnectController::class, 'connect']);
+    Route::post('job_seeker/connect_employer',[ConnectController::class, 'connect_employer']);
+
+//    Employees
+//    Route::group(['middleware' => 'employee'], function () {
+        Route::get('employer/connects',[EmployerController::class, 'connects']);
+//    });
 });
