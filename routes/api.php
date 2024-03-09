@@ -35,24 +35,29 @@ Route::post('auth/login',[UsersController::class, 'login']);
 Route::post('stkpush',[PaymentController::class, 'C2BMpesaApi']);
 
 Route::group(['middleware'=>['auth:sanctum']],function(){
-    Route::get('auth/user',[UsersController::class,'auth']);
 
+    Route::get('auth/user',[UsersController::class,'auth']);
     Route::post('auth/update',[UsersController::class, 'update']);
 
-    Route::post('post_job',[PostController::class, 'post_job']);
-    Route::get('show_posts',[PostController::class, 'show_post']);
 
-    Route::get('show_job_seekers',[JobController::class, 'show']);
 
-    Route::post('referee/add',[RefereeController::class, 'create']);
-    Route::get('referee/view',[RefereeController::class, 'view']);
-
-//    connect
-    Route::post('job_seeker/connect',[ConnectController::class, 'connect']);
-    Route::post('job_seeker/connect_employer',[ConnectController::class, 'connect_employer']);
-
-//    Employees
-//    Route::group(['middleware' => 'employee'], function () {
+    Route::group(['middleware' => 'employee'], function () {
+        //    Employees
+        Route::get('show_job_seekers',[JobController::class, 'show']);
+        Route::get('posts/show_my_posts',[JobController::class, 'my_posts']);
+        Route::post('post/post_job',[PostController::class, 'post_job']);
+        Route::get('posts/my_connects',[PostController::class, 'my_connects']);
+        Route::get('posts/show_my_connects',[PostController::class, 'show_my_connects']);
         Route::get('employer/connects',[EmployerController::class, 'connects']);
-//    });
+        Route::post('job_seeker/connect_job_seeker',[ConnectController::class, 'connect_job_seeker']);
+
+    });
+
+    Route::group(['middleware' => 'job_seeker'], function () {
+//    Job_seekers
+        Route::post('job_seeker/connect_employer',[ConnectController::class, 'connect_employer']);
+        Route::post('referee/add',[RefereeController::class, 'create']);
+        Route::get('referee/view',[RefereeController::class, 'view']);
+        Route::get('show_posts',[PostController::class, 'show_post']);
+    });
 });

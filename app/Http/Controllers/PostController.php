@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Connect;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -56,6 +57,30 @@ class PostController extends Controller
                 return response([
                     'message'=>'success retrieved',
                     'posts'=>$posts
+                ]);
+    }
+    public function my_connects()
+    {
+
+        $user_id=Auth::User()->id;
+        $check_connect_exist = Connect::where('employer_id', $user_id)
+            ->count();
+
+                return response([
+                    'message'=>'success retrieved',
+                    'connects'=>$check_connect_exist
+                ]);
+    }
+    public function show_my_connects()
+    {
+
+        $user_id = Auth::user()->id;
+        $my_job_seekers_connects = Connect::where('employer_id', $user_id)
+            ->join('users', 'connects.job_seeker_id', '=', 'users.id')
+            ->get();
+                 return response([
+                    'message'=>'success retrieved',
+                    'connects'=>$my_job_seekers_connects
                 ]);
     }
 

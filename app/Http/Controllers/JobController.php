@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use App\Models\Referee;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,6 +17,16 @@ class JobController extends Controller
             'status' => 'success',
             'message' => 'Job seekers successfully fetched',
             'data' => $job_seekers
+        ]);
+    }
+    public function my_posts()
+    {
+        $user_id = Auth::user()->id;
+        $posts = Post::where('user_id', $user_id)->count();
+        return response([
+            'status' => 'success',
+            'message' => 'posts fetched successfully',
+            'post' => $posts
         ]);
     }
 }
