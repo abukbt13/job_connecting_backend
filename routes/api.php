@@ -3,6 +3,7 @@
 use App\Http\Controllers\ConnectController;
 use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RefereeController;
@@ -40,13 +41,16 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('auth/update',[UsersController::class, 'update']);
 
 
-
     Route::group(['middleware' => 'employee'], function () {
         //    Employees
+        //notification
+        Route::get('e_notifications',[NotificationController::class, 'e_notifications']);
+
+
         Route::get('show_job_seekers',[JobController::class, 'show']);
         Route::get('posts/show_my_posts',[JobController::class, 'my_posts']);
         Route::post('post/post_job',[PostController::class, 'post_job']);
-        Route::get('posts/my_connects',[PostController::class, 'my_connects']);
+        Route::get('posts/my_connects',[PostController::class, 'e_connects']);
         Route::get('posts/show_my_connects',[PostController::class, 'show_my_connects']);
         Route::get('employer/connects',[EmployerController::class, 'connects']);
         Route::post('job_seeker/connect_job_seeker',[ConnectController::class, 'connect_job_seeker']);
@@ -55,9 +59,17 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
     Route::group(['middleware' => 'job_seeker'], function () {
 //    Job_seekers
-        Route::post('job_seeker/connect_employer',[ConnectController::class, 'connect_employer']);
-        Route::post('referee/add',[RefereeController::class, 'create']);
+        Route::get('e_details/{id}',[UsersController::class, 'e_details']);
+
+        //reference
+        Route::get('create_notification/{id}',[NotificationController::class, 'create_notification']);
+
+
         Route::get('referee/view',[RefereeController::class, 'view']);
         Route::get('show_posts',[PostController::class, 'show_post']);
+        //connect
+        Route::post('job_seeker/connect_employer',[ConnectController::class, 'connect_employer']);
+        Route::get('posts/j_connects',[PostController::class, 'j_connects']);
+        Route::get('show_j_connects',[PostController::class, 'show_j_connects']);
     });
 });

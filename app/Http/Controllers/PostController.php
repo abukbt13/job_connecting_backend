@@ -53,13 +53,13 @@ class PostController extends Controller
     {
 //         $user_id=Auth::user()->id;
                 $posts= Post::all();
-
                 return response([
                     'message'=>'success retrieved',
                     'posts'=>$posts
                 ]);
     }
-    public function my_connects()
+
+    public function e_connects()
     {
 
         $user_id=Auth::User()->id;
@@ -71,6 +71,20 @@ class PostController extends Controller
                     'connects'=>$check_connect_exist
                 ]);
     }
+    public function j_connects()
+    {
+
+        $user_id=Auth::User()->id;
+        $check_connect_exist = Connect::where('job_seeker_id', $user_id)
+            ->count();
+
+                return response([
+                    'message'=>'success retrieved',
+                    'connects'=>$check_connect_exist
+                ]);
+    }
+
+
     public function show_my_connects()
     {
 
@@ -81,6 +95,19 @@ class PostController extends Controller
                  return response([
                     'message'=>'success retrieved',
                     'connects'=>$my_job_seekers_connects
+                ]);
+    }
+
+    public function show_j_connects()
+    {
+
+        $user_id = Auth::user()->id;
+        $my_employer_connects = Connect::where('job_seeker_id', $user_id)
+            ->join('users', 'users.id', '=', 'connects.employer_id')
+            ->get();
+                 return response([
+                    'message'=>'success retrieved',
+                    'connects'=>$my_employer_connects
                 ]);
     }
 

@@ -27,19 +27,31 @@ class ConnectController extends Controller
                 'error' => $valid->errors()
             ]);
         }
+
         $user_id=Auth::User()->id;
-        $connect = new Connect();
-        $connect->job_seeker_id=$user_id;
-        $connect->employer_id=$data['employer_id'];
-        $connect->save();
 
-        return response([
-            'status'=>'success',
-            'message'=>'Connection established successfully',
-            'referees'=>$connect
-        ]);
+        $checkexistence = Connect::where('job_seeker_id', $user_id)->where ('employer_id' ,$data['employer_id'])->count();
 
+        if($checkexistence >0){
+            return response([
+                'status'=>'failed',
+                'message'=>'Connection has been established already',
+            ]);
+        }
+        else{
 
+            $connect = new Connect();
+            $connect->job_seeker_id=$user_id;
+            $connect->employer_id=$data['employer_id'];
+
+            $connect->save();
+
+            return response([
+                'status'=>'success',
+                'message'=>'Connection established successfully',
+                'referees'=>$connect
+            ]);
+        }
     }
     public function connect_job_seeker()
     {
