@@ -48,10 +48,11 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
 
         Route::get('show_job_seekers',[JobController::class, 'show']);
+        Route::get('suggested_job_seekers',[JobController::class, 'suggested_job_seekers']);
         Route::get('posts/show_my_posts',[JobController::class, 'my_posts']);
         Route::post('post/post_job',[PostController::class, 'post_job']);
         Route::get('posts/my_connects',[PostController::class, 'e_connects']);
-        Route::get('posts/show_my_connects',[PostController::class, 'show_my_connects']);
+        Route::get('show_e_connects',[PostController::class, 'show_e_connects']);
         Route::get('employer/connects',[EmployerController::class, 'connects']);
         Route::post('job_seeker/connect_job_seeker',[ConnectController::class, 'connect_job_seeker']);
 
@@ -69,6 +70,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
         Route::get('show_posts',[PostController::class, 'show_post']);
         //connect
         Route::post('job_seeker/connect_employer',[ConnectController::class, 'connect_employer']);
+
         Route::get('posts/j_connects',[PostController::class, 'j_connects']);
         Route::get('show_j_connects',[PostController::class, 'show_j_connects']);
     });

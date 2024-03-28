@@ -85,7 +85,7 @@ class PostController extends Controller
     }
 
 
-    public function show_my_connects()
+    public function show_e_connects()
     {
 
         $user_id = Auth::user()->id;

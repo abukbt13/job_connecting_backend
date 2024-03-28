@@ -19,6 +19,20 @@ class JobController extends Controller
             'data' => $job_seekers
         ]);
     }
+
+    public function suggested_job_seekers()
+    {
+        $user = Auth::user();
+        $county = $user->county;
+        $job_seekers = User::where('role', 'job_seeker')->where('county', 'like', '%' . $county . '%')->get();
+        return response([
+            'status' => 'success',
+            'message' => 'Job seekers successfully fetched',
+            'job_seekers' => $job_seekers
+        ]);
+    }
+
+
     public function my_posts()
     {
         $user_id = Auth::user()->id;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Connect;
 use App\Models\Referee;
+use App\Repositories\MpesaRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -29,9 +30,7 @@ class ConnectController extends Controller
         }
 
         $user_id=Auth::User()->id;
-
         $checkexistence = Connect::where('job_seeker_id', $user_id)->where ('employer_id' ,$data['employer_id'])->count();
-
         if($checkexistence >0){
             return response([
                 'status'=>'failed',
@@ -39,7 +38,8 @@ class ConnectController extends Controller
             ]);
         }
         else{
-
+            $mpesa = new MpesaRepository();
+            $mpesa->C2BMpesaApi();
             $connect = new Connect();
             $connect->job_seeker_id=$user_id;
             $connect->employer_id=$data['employer_id'];
