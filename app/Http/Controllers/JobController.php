@@ -23,10 +23,13 @@ class JobController extends Controller
     {
         $user_id = Auth::user()->id;
         $posts = Post::where('user_id', $user_id)->count();
+        $myposts = Post::where('user_id', $user_id)->get();
+
         return response([
             'status' => 'success',
             'message' => 'posts fetched successfully',
-            'post' => $posts
+            'post' => $posts,
+            'myposts' => $myposts
         ]);
     }
 }
