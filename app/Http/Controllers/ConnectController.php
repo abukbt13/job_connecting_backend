@@ -14,11 +14,12 @@ class ConnectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function connect_employer()
+    public function connect_employer(Request $request)
     {
 
         $rules = [
             'employer_id' => 'required',
+            'phone' => 'required',
         ];
         $data = request()->all();
         $valid = Validator::make($data, $rules);
@@ -29,7 +30,8 @@ class ConnectController extends Controller
             ]);
         }
 
-        $user_id=Auth::User()->id;
+        $user=Auth::User();
+        $user_id=$user->id;
         $checkexistence = Connect::where('job_seeker_id', $user_id)->where ('employer_id' ,$data['employer_id'])->count();
         if($checkexistence >0){
             return response([
@@ -38,8 +40,9 @@ class ConnectController extends Controller
             ]);
         }
         else{
+
             $mpesa = new MpesaRepository();
-            $mpesa->C2BMpesaApi();
+            $mpesa->C2BMpesaApi($request->phone);
             $connect = new Connect();
             $connect->job_seeker_id=$user_id;
             $connect->employer_id=$data['employer_id'];
@@ -79,7 +82,6 @@ class ConnectController extends Controller
                 'message' => 'Connection already established'
             ]);
         }
-
 
         $connect = new Connect();
         $connect->job_seeker_id=$employer_id;

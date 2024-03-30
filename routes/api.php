@@ -68,6 +68,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
         Route::get('referee/view',[RefereeController::class, 'view']);
         Route::get('show_posts',[PostController::class, 'show_post']);
+        Route::get('posts/suggested_posts',[PostController::class, 'suggested_posts']);
         //connect
         Route::post('job_seeker/connect_employer',[ConnectController::class, 'connect_employer']);
 

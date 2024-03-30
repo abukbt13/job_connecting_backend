@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Connect;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -57,6 +58,18 @@ class PostController extends Controller
                     'message'=>'success retrieved',
                     'posts'=>$posts
                 ]);
+    }
+    public function suggested_posts()
+    {
+         $user=Auth::user();
+         $user_id=$user->id;
+         $county=$user->county;
+
+        $posts= Post::join('users','users.id','=','posts.user_id')->where('users.county',$county)->get();
+        return response([
+            'message'=>'success retrieved',
+            'posts'=>$posts
+        ]);
     }
 
     public function e_connects()

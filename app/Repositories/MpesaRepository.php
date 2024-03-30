@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class MpesaRepository
 {
-    public function C2BMpesaApi(){
+    public function C2BMpesaApi($phone){
 
         $timestamp = Carbon::now()->format('YmdHis');
 //        dd($neTimesptamp,$timestamp);
@@ -18,12 +18,12 @@ class MpesaRepository
             'Password' => $password,
             'Timestamp' => $timestamp,
             'TransactionType' => 'CustomerPayBillOnline',
-            'Amount' => round(5,0),
-            'PartyA' => $this->formatPhone('0728548760'),
+            'Amount' => round(1,0),
+            'PartyA' => $this->formatPhone($phone),
             'PartyB' => env('C2B_SHORTCODE'),
-            'PhoneNumber' => $this->formatPhone('0728548760'),
+            'PhoneNumber' => $this->formatPhone($phone),
             'CallBackURL' =>  url('https://kwetunyumbani.online'),
-            'AccountReference' =>'sampleacc_no',
+            'AccountReference' =>$phone.'T',
             'TransactionDesc' => 'Payment for connection'
         );
         $data_string = json_encode($curl_post_data);
