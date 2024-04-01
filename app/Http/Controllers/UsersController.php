@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Connect;
+use App\Models\Referee;
 use Exception;
 use App\Models\User;
 use App\Mail\resetPassword;
@@ -93,6 +95,22 @@ class UsersController extends Controller
         } else {
             return response()->json(['authenticated' => false]);
         }
+    }
+    public function more($id){
+        $user = User::find($id);
+        return response([
+            'status'=>'success',
+            'user'=>$user
+        ]);
+    }
+    public function refs($id){
+       $refs = Referee::where('user_id',$id)->get();
+       $count = Referee::where('user_id',$id)->count();
+        return response([
+            'status'=>'success',
+            'refs'=>$refs,
+            'count'=>$count
+        ]);
     }
     public function update(Request $request)
     {

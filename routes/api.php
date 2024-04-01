@@ -38,6 +38,12 @@ Route::post('stkpush',[PaymentController::class, 'C2BMpesaApi']);
 Route::group(['middleware'=>['auth:sanctum']],function(){
 
     Route::get('auth/user',[UsersController::class,'auth']);
+
+
+    Route::get('more/user/{id}',[UsersController::class,'more']);
+    Route::get('user/ref/{id}',[UsersController::class,'refs']);
+
+
     Route::post('auth/update',[UsersController::class, 'update']);
 
 
@@ -45,7 +51,6 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
         //    Employees
         //notification
         Route::get('e_notifications',[NotificationController::class, 'e_notifications']);
-
 
         Route::get('show_job_seekers',[JobController::class, 'show']);
         Route::get('suggested_job_seekers',[JobController::class, 'suggested_job_seekers']);
@@ -64,7 +69,6 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
         //reference
         Route::get('create_notification/{id}',[NotificationController::class, 'create_notification']);
-
 
         Route::get('referee/view',[RefereeController::class, 'view']);
         Route::get('show_posts',[PostController::class, 'show_post']);
