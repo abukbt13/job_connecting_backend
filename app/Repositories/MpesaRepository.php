@@ -22,7 +22,7 @@ class MpesaRepository
             'PartyA' => $this->formatPhone($phone),
             'PartyB' => env('C2B_SHORTCODE'),
             'PhoneNumber' => $this->formatPhone($phone),
-            'CallBackURL' =>  url('https://kwetunyumbani.online'),
+            'CallBackURL' =>  url('https://jobconnecting.kwetunyumbani.online/api/capture_payment'),
             'AccountReference' =>$phone.'T',
             'TransactionDesc' => 'Payment for connection'
         );
@@ -30,7 +30,10 @@ class MpesaRepository
         $url = 'https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
         $headers = array('Content-Type:application/json','Authorization:Bearer '.$this->getAccessToken()->access_token);
         $res = $this->doCurl($url,$data_string,'POST',$headers);
-        return $res;
+        return response([
+            'status' => 'success',
+            'error' => $res
+        ]);
     }
 
     protected function getAccessToken(){

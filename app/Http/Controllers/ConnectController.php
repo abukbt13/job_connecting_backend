@@ -43,17 +43,17 @@ class ConnectController extends Controller
 
             $mpesa = new MpesaRepository();
             $mpesa->C2BMpesaApi($request->phone);
-            $connect = new Connect();
-            $connect->job_seeker_id=$user_id;
-            $connect->employer_id=$data['employer_id'];
-
-            $connect->save();
-
-            return response([
-                'status'=>'success',
-                'message'=>'Connection established successfully',
-                'referees'=>$connect
-            ]);
+//            $connect = new Connect();
+//            $connect->job_seeker_id=$user_id;
+//            $connect->employer_id=$data['employer_id'];
+//
+//            $connect->save();
+//
+//            return response([
+//                'status'=>'success',
+//                'message'=>'Connection established successfully',
+//                'referees'=>$connect
+//            ]);
         }
     }
     public function connect_job_seeker()

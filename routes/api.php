@@ -33,7 +33,7 @@ Route::post('auth/change_password/{id}',[UsersController::class, 'change_passwor
 Route::post('auth/login',[UsersController::class, 'login']);
 
 
-Route::post('stkpush',[PaymentController::class, 'C2BMpesaApi']);
+Route::post('capture_payment',[PaymentController::class, 'capture']);
 
 Route::group(['middleware'=>['auth:sanctum']],function(){
 
