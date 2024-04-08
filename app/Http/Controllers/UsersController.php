@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Connect;
+use App\Models\Inquire;
 use App\Models\Referee;
 use Exception;
 use App\Models\User;
@@ -15,6 +16,23 @@ use Illuminate\Support\Facades\Mail;
 
 class UsersController extends Controller
 {
+    public function agent(Request $request)
+            {
+                // Get the User-Agent header from the request
+                $userAgent = $request->header('User-Agent');
+
+                // Use a library like jenssegers/agent to parse the User-Agent string
+                $agent = new \Jenssegers\Agent\Agent();
+
+                // Detect the platform using the parsed User-Agent string
+                $platform = $agent->platform();
+
+                // Log or use the platform information as needed
+                storelog('platform', $platform);
+
+                // Return a response or perform other actions based on the platform
+                return response()->json(['platform' => $platform]);
+            }
     public function store(Request $request)
     {
         $rules = [
@@ -225,5 +243,153 @@ public function e_details($id) {
         ]);
 
 }
+
+    public function forget_pass(){
+        $rules = [
+            'email' => 'required',
+        ];
+        $data = request()->all();
+        $valid = Validator::make($data, $rules);
+        if (count($valid->errors())){
+            return response([
+                'status' => 'failed',
+                'error' => $valid->errors()
+            ]);
+        }
+        $email=$data['email'];
+        $user = User::where('email',$email)->first();
+        if ($user){
+            $otp = rand(999,10000);
+            $user->otp = $otp;
+            $user->update();
+
+            $to=$user->phone;
+
+            $curl = curl_init();
+            $message ="Use OTP : $otp to reset your password ";
+            $data = array(
+                'api_token' => env('API_TOKEN'),
+                'from' => env('SENDER_NAME'),
+                'to' => '+254'.$to,
+                'message' => $message
+            );
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => env('CURLOPT_URL'),
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => http_build_query($data),
+            ));
+
+            $response = curl_exec($curl);
+            curl_close($curl);
+            $data = json_decode($response, true);
+
+            $status = $data['status'];
+            if($status == 'success'){
+                return response([
+                    'status'=>'success'
+                ]);
+            }
+            else{
+                return response([
+                    'failed'=>'Try again later'
+                ]);
+            }
+
+        }
+
+
+
+        else{
+            return response([
+                'status'=>'User not found'
+            ]);
+        }
+
+    }
+    public function reset_password(){
+        $rules = [
+            'email' => 'required',
+            'otp' => 'required',
+        ];
+        $data = request()->all();
+        $valid = Validator::make($data, $rules);
+        if (count($valid->errors())){
+            return response([
+                'status' => 'failed',
+                'error' => $valid->errors()
+            ]);
+        }
+        $email=$data['email'];
+        $otp=$data['otp'];
+
+        $user = User::where('email',$email)->where('otp',$otp)->first();
+        if ($user){
+            return response([
+                'status'=>'success',
+                'message' =>'Success you can change your password'
+            ]);
+        }
+        else{
+            return response([
+                'status'=>'failed',
+                'message' =>'Enter correct details '
+            ]);
+        }
+
+
+
+    }
+    public function finish_reset(){
+        $rules = [
+            'email' => 'required',
+            'otp' => 'required',
+            'password' => [
+                'required',
+                'min:8', // Enforce minimum password length of 6 characters
+                'regex:/[A-Z]+/', // Ensure at least one uppercase letter
+                'regex:/[!@#$%^&*()_+:\-=\[\]{};"\\|,.<>\/?]+/', // Ensure at least one symbol (excluding common delimiters)
+            ],
+        ];
+        $data = request()->all();
+        $valid = Validator::make($data, $rules);
+        if (count($valid->errors())){
+            return response([
+                'status' => 'failed',
+                'message' =>'Ensure you enter correct details',
+                'error' => $valid->errors()
+            ]);
+        }
+        $email=$data['email'];
+        $otp=$data['otp'];
+        $password=$data['password'];
+        $hah_password = hash('sha256',$password);
+        $user = User::where('email',$email)->where('otp',$otp)->first();
+        if ($user){
+
+            $user->password = $hah_password;
+            $user->update();
+            return response([
+                'status'=>'success',
+                'message' =>'Password changed successfully'
+            ]);
+        }
+        else{
+            return response([
+                'status'=>'failed',
+                'message' =>'Ensure correct details are entered'
+            ]);
+        }
+
+
+
+    }
+
 
 }

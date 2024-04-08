@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class MpesaRepository
 {
-    public function C2BMpesaApi($phone){
+    public function C2BMpesaApi($job_seeker_id,$employer_id,$phone){
 
         $timestamp = Carbon::now()->format('YmdHis');
 //        dd($neTimesptamp,$timestamp);
@@ -22,7 +22,7 @@ class MpesaRepository
             'PartyA' => $this->formatPhone($phone),
             'PartyB' => env('C2B_SHORTCODE'),
             'PhoneNumber' => $this->formatPhone($phone),
-            'CallBackURL' =>  url('https://jobconnecting.kwetunyumbani.online/api/capture_payment'),
+            'CallBackURL' => url('https://jobconnecting.kwetunyumbani.online/api/capture_payment/' . $employer_id .'/'.$job_seeker_id),
             'AccountReference' =>$phone.'T',
             'TransactionDesc' => 'Payment for connection'
         );
@@ -30,10 +30,7 @@ class MpesaRepository
         $url = 'https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
         $headers = array('Content-Type:application/json','Authorization:Bearer '.$this->getAccessToken()->access_token);
         $res = $this->doCurl($url,$data_string,'POST',$headers);
-        return response([
-            'status' => 'success',
-            'error' => $res
-        ]);
+        return $res;
     }
 
     protected function getAccessToken(){

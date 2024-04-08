@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ConnectController;
 use App\Http\Controllers\EmployerController;
+use App\Http\Controllers\InquiriesController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentController;
@@ -26,14 +28,21 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('agent',[UsersController::class, 'agent']);
+
 Route::post('auth/register',[UsersController::class, 'store']);
 Route::post('auth/login',[UsersController::class, 'login']);
+
 Route::post('auth/reset_password',[UsersController::class, 'reset_password']);
 Route::post('auth/change_password/{id}',[UsersController::class, 'change_password']);
-Route::post('auth/login',[UsersController::class, 'login']);
+Route::post('auth/forget_password',[UsersController::class,'forget_pass']);
+Route::post('auth/finish_reset',[UsersController::class,'finish_reset']);
 
 
-Route::post('capture_payment',[PaymentController::class, 'capture']);
+Route::post('inquire',[InquiriesController::class, 'inquire']);
+
+
+Route::post('capture_payment/{job_seeker_id}/{employer_id}',[PaymentController::class, 'capture']);
 
 Route::group(['middleware'=>['auth:sanctum']],function(){
 
@@ -48,9 +57,10 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
 
     Route::group(['middleware' => 'employee'], function () {
-        //    Employees
-        //notification
+
         Route::get('e_notifications',[NotificationController::class, 'e_notifications']);
+
+
 
         Route::get('show_job_seekers',[JobController::class, 'show']);
         Route::get('suggested_job_seekers',[JobController::class, 'suggested_job_seekers']);
@@ -62,7 +72,6 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
         Route::post('job_seeker/connect_job_seeker',[ConnectController::class, 'connect_job_seeker']);
 
     });
-
     Route::group(['middleware' => 'job_seeker'], function () {
 //    Job_seekers
         Route::get('e_details/{id}',[UsersController::class, 'e_details']);
@@ -79,4 +88,13 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
         Route::get('posts/j_connects',[PostController::class, 'j_connects']);
         Route::get('show_j_connects',[PostController::class, 'show_j_connects']);
     });
+
+
+    Route::group(['middleware' => 'admin'], function () {
+        Route::get('inquire/message', [AdminController::class, 'messages']);
+        Route::get('show_logs', [AdminController::class, 'show_logs']);
+        Route::get('payments', [AdminController::class, 'payments']);
+        Route::get('users', [AdminController::class, 'users']);
+    });
+
 });

@@ -29,7 +29,7 @@ class ConnectController extends Controller
                 'error' => $valid->errors()
             ]);
         }
-
+        $phone=$request->phone;
         $user=Auth::User();
         $user_id=$user->id;
         $checkexistence = Connect::where('job_seeker_id', $user_id)->where ('employer_id' ,$data['employer_id'])->count();
@@ -41,19 +41,10 @@ class ConnectController extends Controller
         }
         else{
 
+            $job_seeker_id=$user_id;
+            $employer_id=$data['employer_id'];
             $mpesa = new MpesaRepository();
-            $mpesa->C2BMpesaApi($request->phone);
-//            $connect = new Connect();
-//            $connect->job_seeker_id=$user_id;
-//            $connect->employer_id=$data['employer_id'];
-//
-//            $connect->save();
-//
-//            return response([
-//                'status'=>'success',
-//                'message'=>'Connection established successfully',
-//                'referees'=>$connect
-//            ]);
+            $mpesa->C2BMpesaApi($job_seeker_id,$employer_id,$phone);
         }
     }
     public function connect_job_seeker()
