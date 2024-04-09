@@ -58,6 +58,9 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
     Route::group(['middleware' => 'employee'], function () {
 
+        Route::get('j_details/{id}',[UsersController::class, 'j_details']);
+        Route::get('notify_user/{id}',[NotificationController::class, 'create_e_notification']);//create connection
+
         Route::get('e_notifications',[NotificationController::class, 'e_notifications']);
 
 

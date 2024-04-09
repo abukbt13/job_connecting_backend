@@ -235,14 +235,20 @@ class UsersController extends Controller
 //        ]);
 //    }
 
-public function e_details($id) {
-        $user=User::find($id);
-    return response([
-            'status'=>'success',
-            'user'=>$user
-        ]);
-
-}
+    public function e_details($id) {
+            $user=User::find($id);
+            return response([
+                'status'=>'success',
+                'user'=>$user
+            ]);
+    }
+    public function j_details($id) {
+            $user=User::find($id);
+            return response([
+                'status'=>'success',
+                'user'=>$user
+            ]);
+    }
 
     public function forget_pass(){
         $rules = [

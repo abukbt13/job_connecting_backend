@@ -20,7 +20,7 @@ class NotificationController extends Controller
       if($check_exist>0){
           return response([
               'status'=>'failed',
-              'message'=>'connection already created'
+              'message'=>'Notification already created'
           ]);
       }
       else{
@@ -37,6 +37,35 @@ class NotificationController extends Controller
       }
 
     }
+    public function create_e_notification($job_seeker_id)
+    {
+      $notification = new Notification();
+      $user_id = Auth::user()->id;
+      $check_exist = Notification::where('job_seeker_id', $job_seeker_id)->where('employer_id', $user_id)->count();
+
+      if($check_exist>0){
+          return response([
+              'status'=>'failed',
+              'message'=>'Notification already created'
+          ]);
+      }
+      else{
+          $notification->job_seeker_id = $job_seeker_id;
+          $notification->employer_id =$user_id;
+          $notification->e_status = 'inactive';
+          $notification->j_status = 'active';
+          $notification->save();
+
+          return response([
+              'status'=>'success',
+              'message'=>'Notification was successfully created'
+          ]);
+      }
+
+    }
+
+
+
 
     public function e_notifications(Notification $notification)
     {

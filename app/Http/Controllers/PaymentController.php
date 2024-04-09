@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Carbon\Carbon;
 use App\Models\Capture;
 use App\Models\Connect;
 use App\Models\Payment;
@@ -24,9 +24,11 @@ class PaymentController extends Controller
             // Access MpesaReceiptNumber and PhoneNumber
             $mpesa_receipt_number = $data['Body']['stkCallback']['CallbackMetadata']['Item'][1]['Value'];
             $phone_number = $data['Body']['stkCallback']['CallbackMetadata']['Item'][4]['Value'];
-            echo $phone_number;
-            echo $mpesa_receipt_number;
+
+
+        $today = Carbon::today();
             // Log the extracted data
+            file_put_contents('log.txt', 'Mpesa Transaction details for date : '.$today."\n", FILE_APPEND);
             file_put_contents('log.txt', 'Mpesa Receipt Number: ' . $mpesa_receipt_number . "\n", FILE_APPEND);
             file_put_contents('log.txt', 'Phone Number: ' . $phone_number . "\n", FILE_APPEND);
 
@@ -34,6 +36,7 @@ class PaymentController extends Controller
             $connect = new Connect();
             $connect->job_seeker_id=$job_seeker_id;
             $connect->employer_id=$employer_id;
+            $connect->receipt_no=$mpesa_receipt_number;
             $connect->save();
         }
 
