@@ -43,20 +43,20 @@ class ConnectController extends Controller
 
             $job_seeker_id=$user_id;
             $employer_id=$data['employer_id'];
-//            $mpesa = new MpesaRepository();
-//            $mpesa->C2BMpesaApi($job_seeker_id,$employer_id,$phone);
-            $connect = new Connect();
-            $connect->job_seeker_id=$job_seeker_id;
-            $connect->employer_id=$employer_id;
-            $connect->receipt_no='vhjvhgdredh';
-            $connect->save();
+            $mpesa = new MpesaRepository();
+            $mpesa->C2BMpesaApi($job_seeker_id,$employer_id,$phone);
+//            $connect = new Connect();
+//            $connect->job_seeker_id=$job_seeker_id;
+//            $connect->employer_id=$employer_id;
+//            $connect->receipt_no='vhjvhgdredh';
+//            $connect->save();
             return response([
                 'status'=>'success',
                 'message'=>'Connection has been established already',
             ]);
         }
     }
-    public function connect_job_seeker()
+    public function connect_job_seeker(Request $request)
     {
 
         $rules = [
@@ -71,22 +71,25 @@ class ConnectController extends Controller
             ]);
         }
         $user_id=Auth::User()->id;
-        $employer_id = $data['job_seeker_id'];
-        $check_connect_exist = Connect::where('employer_id', $user_id)
-            ->where('job_seeker_id', $employer_id)
-            ->first();
+        $phone=$request->phone;
+        $job_seeker_id = $data['job_seeker_id'];
+        $employer_id = $user_id;
 
-        if ($check_connect_exist) {
+        $checkexistence = Connect::where('employer_id', $employer_id)->where ('job_seeker_id' ,$job_seeker_id)->count();
+
+        if ($checkexistence>0) {
             return response()->json([
                 'status' => 'failed',
                 'message' => 'Connection already established'
             ]);
         }
-
-        $connect = new Connect();
-        $connect->job_seeker_id=$employer_id;
-        $connect->employer_id=$user_id;
-        $connect->save();
+            $mpesa = new MpesaRepository();
+            $mpesa->C2BMpesaApi($job_seeker_id,$employer_id,$phone);
+//        $connect = new Connect();
+//        $connect->job_seeker_id=$employer_id;
+//        $connect->employer_id=$user_id;
+//        $connect->receipt_no='vhjvhgdredh';
+//        $connect->save();
 
         return response([
             'status'=>'success',

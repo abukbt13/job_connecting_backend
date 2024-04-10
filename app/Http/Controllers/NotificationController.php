@@ -15,7 +15,8 @@ class NotificationController extends Controller
     {
       $notification = new Notification();
       $user_id = Auth::user()->id;
-      $check_exist = Notification::where('employer_id', $employee_id)->where('job_seeker_id', $user_id)->count();
+      $check_exist = Notification::where('employer_id', $employee_id)->where('job_seeker_id', $user_id)
+          ->where('j_status','inactive')->count();
 
       if($check_exist>0){
           return response([
@@ -41,7 +42,8 @@ class NotificationController extends Controller
     {
       $notification = new Notification();
       $user_id = Auth::user()->id;
-      $check_exist = Notification::where('job_seeker_id', $job_seeker_id)->where('employer_id', $user_id)->count();
+      $check_exist = Notification::where('job_seeker_id', $job_seeker_id)->where('employer_id', $user_id)
+          ->where('e_status','inactive')->count();
 
       if($check_exist>0){
           return response([
@@ -71,11 +73,30 @@ class NotificationController extends Controller
     {
         $user_id = Auth::user()->id;
         $notification_count = Notification::where('employer_id', $user_id)->where('e_status','active')->count();
-        $notification = Notification::where('employer_id', $user_id)->where('e_status','active')->get();
+        $notification = Notification::where('employer_id', $user_id)
+            ->join('users', 'users.id', '=', 'notifications.job_seeker_id')
+            ->where('e_status', 'active')
+            ->select('firstName','lastName','picture','county')
+            ->get();
         return response([
             'status'=>'success',
             'count'=>$notification_count,
             'notification'=>$notification,
+        ]);
+    }
+    public function j_notifications(Notification $notification)
+    {
+        $user_id = Auth::user()->id;
+        $notification_count = Notification::where('job_seeker_id', $user_id)->where('j_status','active')->count();
+        $notifications = Notification::where('job_seeker_id', $user_id)
+            ->join('users', 'users.id', '=', 'notifications.employer_id')
+            ->where('j_status', 'active')
+            ->select('firstName','lastName','picture','county')
+            ->get();
+        return response([
+            'status'=>'success',
+            'count'=>$notification_count,
+            'notification'=>$notifications,
         ]);
     }
 }

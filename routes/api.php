@@ -77,6 +77,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     });
     Route::group(['middleware' => 'job_seeker'], function () {
 //    Job_seekers
+        Route::get('j_notifications',[NotificationController::class, 'j_notifications']);
         Route::get('e_details/{id}',[UsersController::class, 'e_details']);
 
         //reference
