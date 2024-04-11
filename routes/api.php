@@ -55,6 +55,10 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
     Route::post('auth/update',[UsersController::class, 'update']);
 
+    //Referee section
+    Route::get('referee/view',[RefereeController::class, 'view']);
+    Route::post('referee/add',[RefereeController::class, 'create']);
+
 
     Route::group(['middleware' => 'employee'], function () {
 
@@ -62,8 +66,6 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
         Route::get('notify_user/{id}',[NotificationController::class, 'create_e_notification']);//create connection
 
         Route::get('e_notifications',[NotificationController::class, 'e_notifications']);
-
-
 
         Route::get('show_job_seekers',[JobController::class, 'show']);
         Route::get('suggested_job_seekers',[JobController::class, 'suggested_job_seekers']);
@@ -83,7 +85,6 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
         //reference
         Route::get('create_notification/{id}',[NotificationController::class, 'create_notification']);
 
-        Route::get('referee/view',[RefereeController::class, 'view']);
         Route::get('show_posts',[PostController::class, 'show_post']);
         Route::get('posts/suggested_posts',[PostController::class, 'suggested_posts']);
         //connect
@@ -92,7 +93,6 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
         Route::get('posts/j_connects',[PostController::class, 'j_connects']);
         Route::get('show_j_connects',[PostController::class, 'show_j_connects']);
     });
-
 
     Route::group(['middleware' => 'admin'], function () {
         Route::get('inquire/message', [AdminController::class, 'messages']);

@@ -43,13 +43,13 @@ class ConnectController extends Controller
 
             $job_seeker_id=$user_id;
             $employer_id=$data['employer_id'];
-            $mpesa = new MpesaRepository();
-            $mpesa->C2BMpesaApi($job_seeker_id,$employer_id,$phone);
-//            $connect = new Connect();
-//            $connect->job_seeker_id=$job_seeker_id;
-//            $connect->employer_id=$employer_id;
-//            $connect->receipt_no='vhjvhgdredh';
-//            $connect->save();
+//            $mpesa = new MpesaRepository();
+//            $mpesa->C2BMpesaApi($job_seeker_id,$employer_id,$phone);
+            $connect = new Connect();
+            $connect->job_seeker_id=$job_seeker_id;
+            $connect->employer_id=$employer_id;
+            $connect->receipt_no='vhjvhgdredh';
+            $connect->save();
             return response([
                 'status'=>'success',
                 'message'=>'Connection has been established already',
@@ -83,13 +83,13 @@ class ConnectController extends Controller
                 'message' => 'Connection already established'
             ]);
         }
-            $mpesa = new MpesaRepository();
-            $mpesa->C2BMpesaApi($job_seeker_id,$employer_id,$phone);
-//        $connect = new Connect();
-//        $connect->job_seeker_id=$employer_id;
-//        $connect->employer_id=$user_id;
-//        $connect->receipt_no='vhjvhgdredh';
-//        $connect->save();
+//            $mpesa = new MpesaRepository();
+//            $mpesa->C2BMpesaApi($job_seeker_id,$employer_id,$phone);
+        $connect = new Connect();
+        $connect->job_seeker_id=$employer_id;
+        $connect->employer_id=$user_id;
+        $connect->receipt_no='vhjvhgdredh';
+        $connect->save();
 
         return response([
             'status'=>'success',

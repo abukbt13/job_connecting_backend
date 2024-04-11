@@ -26,7 +26,7 @@ class PaymentController extends Controller
             $phone_number = $data['Body']['stkCallback']['CallbackMetadata']['Item'][4]['Value'];
 
 
-        $today = Carbon::today();
+            $today = Carbon::today();
             // Log the extracted data
             file_put_contents('log.txt', 'Mpesa Transaction details for date : '.$today."\n", FILE_APPEND);
             file_put_contents('log.txt', 'Mpesa Receipt Number: ' . $mpesa_receipt_number . "\n", FILE_APPEND);
