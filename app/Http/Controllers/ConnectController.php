@@ -61,6 +61,7 @@ class ConnectController extends Controller
 
         $rules = [
             'job_seeker_id' => 'required',
+            'phone' => 'required',
         ];
         $data = request()->all();
         $valid = Validator::make($data, $rules);
