@@ -16,23 +16,7 @@ use Illuminate\Support\Facades\Mail;
 
 class UsersController extends Controller
 {
-    public function agent(Request $request)
-            {
-                // Get the User-Agent header from the request
-                $userAgent = $request->header('User-Agent');
 
-                // Use a library like jenssegers/agent to parse the User-Agent string
-                $agent = new \Jenssegers\Agent\Agent();
-
-                // Detect the platform using the parsed User-Agent string
-                $platform = $agent->platform();
-
-                // Log or use the platform information as needed
-                storelog('platform', $platform);
-
-                // Return a response or perform other actions based on the platform
-                return response()->json(['platform' => $platform]);
-            }
     public function store(Request $request)
     {
         $rules = [
@@ -106,7 +90,6 @@ class UsersController extends Controller
             ]);
         }
     }
-
     public function auth(){
         if (Auth::check()) {
             return response()->json(['authenticated' => true]);
@@ -174,67 +157,6 @@ class UsersController extends Controller
 
 //
     }
-//    public function reset_password(Request $request){
-//        $OTP=rand();
-//
-//        $email=$request->email;
-//        $user=User::where('email','=',$email)->get()->first();
-//        $user->otp=99999;
-//
-//        $user->update();
-//        $data = [
-//            'subject' => 'Reset Password message',
-//            'body' => 'Reset Password',
-//            'otp' => $OTP
-//        ];
-//        if ($user){
-//            try {
-//                Mail::to($email)->send(new resetPassword($data));
-//                return response()->json([
-//                    'status'=>'success',
-//                    'message'=>'Password reset sent successfully open your email account to reset your password'
-//                ]);
-//
-//            }catch (Exception $th){
-//                return response()->json([
-//                    'status' =>'failed',
-//                    'error'=>'Email does not exist'
-//                ]);
-//            }
-//
-//
-//        }
-//        else{
-//            return response()->json([
-//                'status'=>'fail',
-//                'message'=>'Email not found'
-//            ]);
-//        }
-//
-//    }
-//    public function change_password(Request $request,$id)
-//    {
-//        $user=User::where('otp','=',$id)->get()->first();
-//        $user->password = Hash::make($request->password);
-//        $user->update();
-//        return response()->json([
-//            'status'=>'success',
-//            'message'=>'Password changed successfully'
-//        ]);
-//    }
-//    public function updateStatus(){
-//        $user_id=Auth::user();
-//        $user_id=$user_id->id;
-//        $user = User::find($user_id);
-//        $user->status = 'applied';
-//        $user->update();
-//
-//        return response([
-//            'status'=>'success',
-//            'message'=>'Job applied successfully'
-//        ]);
-//    }
-
     public function e_details($id) {
             $user=User::find($id);
             return response([
@@ -249,7 +171,6 @@ class UsersController extends Controller
                 'user'=>$user
             ]);
     }
-
     public function forget_pass(){
         $rules = [
             'email' => 'required',
@@ -396,6 +317,25 @@ class UsersController extends Controller
 
 
     }
+    public function employers(){
+        $employers = User::where('role', 'employer')->get();
+
+            return response([
+                'status'=>'success',
+                'message' =>'Employers retrieved successfully',
+                'employers' =>$employers
+            ]);
+        }
+    public function employer_details($id){
+        $employers = User::find($id);
+        $employer_reference = Referee::where('user_id',$id)->get();
+            return response([
+                'status'=>'success',
+                'message' =>'Employers retrieved successfully',
+                'employers' =>$employers,
+                'referee' =>$employer_reference
+            ]);
+        }
 
 
 }

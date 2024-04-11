@@ -28,7 +28,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('agent',[UsersController::class, 'agent']);
 
 Route::post('auth/register',[UsersController::class, 'store']);
 Route::post('auth/login',[UsersController::class, 'login']);
@@ -64,7 +63,6 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
         Route::get('j_details/{id}',[UsersController::class, 'j_details']);
         Route::get('notify_user/{id}',[NotificationController::class, 'create_e_notification']);//create connection
-
         Route::get('e_notifications',[NotificationController::class, 'e_notifications']);
 
         Route::get('show_job_seekers',[JobController::class, 'show']);
@@ -75,12 +73,13 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
         Route::get('show_e_connects',[PostController::class, 'show_e_connects']);
         Route::get('employer/connects',[EmployerController::class, 'connects']);
         Route::post('job_seeker/connect_job_seeker',[ConnectController::class, 'connect_job_seeker']);
-
     });
+
     Route::group(['middleware' => 'job_seeker'], function () {
 //    Job_seekers
         Route::get('j_notifications',[NotificationController::class, 'j_notifications']);
         Route::get('e_details/{id}',[UsersController::class, 'e_details']);
+        Route::get('employer/details/{id}',[UsersController::class, 'employer_details']);
 
         //reference
         Route::get('create_notification/{id}',[NotificationController::class, 'create_notification']);
@@ -92,6 +91,9 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
         Route::get('posts/j_connects',[PostController::class, 'j_connects']);
         Route::get('show_j_connects',[PostController::class, 'show_j_connects']);
+
+
+        Route::get('employers',[UsersController::class, 'employers']);
     });
 
     Route::group(['middleware' => 'admin'], function () {
