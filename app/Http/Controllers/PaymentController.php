@@ -34,8 +34,8 @@ class PaymentController extends Controller
 
         // You can perform further processing or return a response here
         $connect = new Connect();
-        $connect->job_seeker_id=$employer_id;
-        $connect->employer_id=$job_seeker_id;
+        $connect->job_seeker_id=$job_seeker_id;
+        $connect->employer_id=$employer_id;
         $connect->receipt_no=$mpesa_receipt_number;
         $connect->save();
     }

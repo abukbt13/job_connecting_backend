@@ -87,8 +87,8 @@ class ConnectController extends Controller
 //            $mpesa = new MpesaRepository();
 //            $mpesa->C2BMpesaApi($job_seeker_id,$employer_id,$phone);
         $connect = new Connect();
-        $connect->job_seeker_id=$employer_id;
-        $connect->employer_id=$user_id;
+        $connect->job_seeker_id=$job_seeker_id;
+        $connect->employer_id=$employer_id;
         $connect->receipt_no='vhjvhgdredh';
         $connect->save();
 

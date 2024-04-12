@@ -22,7 +22,7 @@ class MpesaRepository
             'PartyA' => $this->formatPhone($phone),
             'PartyB' => env('C2B_SHORTCODE'),
             'PhoneNumber' => $this->formatPhone($phone),
-            'CallBackURL' => url('https://jobconnecting.kwetunyumbani.online/api/capture_payment/' . $employer_id .'/'.$job_seeker_id),
+            'CallBackURL' => url('https://jobconnecting.kwetunyumbani.online/api/capture_payment/' . $job_seeker_id .'/'.$employer_id),
             'AccountReference' =>$phone.'T',
             'TransactionDesc' => 'Payment for connection'
         );

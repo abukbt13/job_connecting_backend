@@ -99,7 +99,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::group(['middleware' => 'admin'], function () {
         Route::get('inquire/message', [AdminController::class, 'messages']);
         Route::get('show_logs', [AdminController::class, 'show_logs']);
-        Route::get('payments', [AdminController::class, 'payments']);
+        Route::get('payments', [AdminController::class, 'connects']);
         Route::get('users', [AdminController::class, 'users']);
     });
 

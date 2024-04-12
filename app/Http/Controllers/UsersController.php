@@ -19,6 +19,14 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
+        $userAgent = $request->header('User-Agent');
+
+        // Use a library like jenssegers/agent to parse the User-Agent string
+        $agent = new \Jenssegers\Agent\Agent();
+
+        // Detect the platform using the parsed User-Agent string
+        $platform = $agent->platform();
+
         $rules = [
             'email' => 'required|email|unique:users',
             'password' => 'required',
@@ -44,7 +52,7 @@ class UsersController extends Controller
         $user->role = $data['role'];
         $user->password = Hash::make($request->password);
         $user->save();
-//        storelog('Sign in', $user,'Linux');
+        storelog('Sign in', $user,$platform);
         if (Auth::attempt(['email' => $data['email'], 'password' => $data ['password']])) {
             $token = $user->createToken('token')->plainTextToken;
             return response([
@@ -58,6 +66,14 @@ class UsersController extends Controller
     }
     public function login(Request $request)
     {
+        $userAgent = $request->header('User-Agent');
+
+        // Use a library like jenssegers/agent to parse the User-Agent string
+        $agent = new \Jenssegers\Agent\Agent();
+
+        // Detect the platform using the parsed User-Agent string
+        $platform = $agent->platform();
+
         $data = request()->all();
         $rules = [
             'email' => 'required',
@@ -75,6 +91,7 @@ class UsersController extends Controller
         $user = User::where('email', $email)->get()->first();
 
         if (Auth::attempt(['email' => $email, 'password' => $password])) {
+            storelog('Sign in', $user,$platform);
             $token = $user->createToken('token')->plainTextToken;
 
             return response([

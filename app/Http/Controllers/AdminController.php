@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Connect;
 use App\Models\Inquire;
 use App\Models\Log;
 use App\Models\Payment;
@@ -24,18 +25,18 @@ class AdminController extends Controller
             'logs'=>$show_logs
         ]);
     }
-    public function payments(){
-        $payments = Payment::all();
+    public function connects(){
+        $connects = Connect::all();
         return response([
             'status'=>'success',
-            'payments'=>$payments
+            'connects'=>$connects
         ]);
     }
     public function users(){
         $users = User::all();
         return response([
             'status'=>'success',
-            'payments'=>$users
+            'users'=>$users
         ]);
     }
 }
