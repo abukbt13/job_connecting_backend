@@ -257,7 +257,7 @@ class UsersController extends Controller
         }
 
     }
-    public function reset_password(){
+    public function confirmOtp(){
         $rules = [
             'email' => 'required',
             'otp' => 'required',
@@ -286,10 +286,9 @@ class UsersController extends Controller
                 'message' =>'Enter correct details '
             ]);
         }
-
-
-
     }
+
+
     public function finish_reset(){
         $rules = [
             'email' => 'required',
@@ -313,11 +312,9 @@ class UsersController extends Controller
         $email=$data['email'];
         $otp=$data['otp'];
         $password=$data['password'];
-        $hah_password = hash('sha256',$password);
         $user = User::where('email',$email)->where('otp',$otp)->first();
         if ($user){
-
-            $user->password = $hah_password;
+            $user->password = Hash::make($password);
             $user->update();
             return response([
                 'status'=>'success',
